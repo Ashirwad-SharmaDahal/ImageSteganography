@@ -72,16 +72,26 @@ public class MainPage {
         messagePanel.add(messageField);
         messageField.setColumns(10);
 
-        ActionListener encryptListener = new ActionListener() {
+        ActionListener encryptListener = new ActionListener() 
             @Override
             public void actionPerformed(ActionEvent e){
                 File ImageFile = FileChooser.MakeFileChooser();
                 if(ImageFile != null) {
-                     JOptionPane.showMessageDialog(frame, "Selected file: " + ImageFile.getAbsolutePath(), "File Selected", JOptionPane.INFORMATION_MESSAGE);
+                    EncryptLSB.Encrypt(ImageFile, messageField.getText());
                 }
             }
         };
         encryptButton.addActionListener(encryptListener);
-    }
+
+        ActionListener decryptListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+
+            }
+
+        };
+        decryptButton.addActionListener(decryptListener);
+
+    }    
 }
 
