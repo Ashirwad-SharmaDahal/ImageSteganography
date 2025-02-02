@@ -20,9 +20,7 @@ import javax.swing.JTextField;
 public class MainPage {
     private JFrame frame;
     private JTextField messageField;
-    // CHANGE: Added JLabel to display decrypted message
     private JLabel decryptedMessageLabel;
-    // CHANGE: Added JLabel to display the modified image
     private JLabel imageLabel;
 
     public static void main(String[] args) {
@@ -72,12 +70,10 @@ public class MainPage {
         messagePanel.add(messageField);
         messageField.setColumns(10);
 
-        // CHANGE: Added JLabel to display decrypted message
         decryptedMessageLabel = new JLabel("Decrypted Message will appear here");
         decryptedMessageLabel.setBounds(40, 60, 500, 20);
         messagePanel.add(decryptedMessageLabel);
 
-        // CHANGE: Added JLabel to display the modified image
         imageLabel = new JLabel();
         imageLabel.setBounds(40, 100, 500, 200);
         messagePanel.add(imageLabel);
@@ -87,31 +83,25 @@ public class MainPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String message = messageField.getText();
-                // CHANGE: Added error handling for empty message
                 if (message.isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Please enter a message to encrypt.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                // CHANGE: Allow user to select input image file
                 File imageFile = FileChooser.selectImageFile(frame);
                 if (imageFile == null) {
                     return; // User canceled file selection
                 }
 
-                // CHANGE: Allow user to choose output file location
                 File outputFile = FileChooser.saveImageFile(frame);
                 if (outputFile == null) {
                     return; // User canceled file save
                 }
 
                 try {
-                    // CHANGE: Encrypt the message and save the modified image
                     EncryptLSB.encrypt(imageFile, message, outputFile);
-                    // CHANGE: Display the modified image in the GUI
                     BufferedImage modifiedImage = ImageIO.read(outputFile);
                     imageLabel.setIcon(new ImageIcon(modifiedImage));
-                    // CHANGE: Show success message
                     JOptionPane.showMessageDialog(frame, "Message encrypted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 } catch (IOException ex) {
                     // CHANGE: Show error message if encryption fails
@@ -124,18 +114,15 @@ public class MainPage {
         decryptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // CHANGE: Allow user to select the encrypted image file
                 File imageFile = FileChooser.selectImageFile(frame);
                 if (imageFile == null) {
                     return; // User canceled file selection
                 }
 
                 try {
-                    // CHANGE: Decrypt the message and display it in the GUI
                     String decryptedMessage = DecryptLSB.decrypt(imageFile);
                     decryptedMessageLabel.setText("Decrypted Message: " + decryptedMessage);
                 } catch (IOException ex) {
-                    // CHANGE: Show error message if decryption fails
                     JOptionPane.showMessageDialog(frame, "Error decrypting message: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
