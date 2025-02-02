@@ -1,11 +1,10 @@
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-import java.awt.Color;
 import javax.swing.JFileChooser;
 
 public class EncryptLSB {
@@ -27,6 +26,7 @@ public class EncryptLSB {
             ReplacePixelsInNewBufferedImage(pixels, imageToEncrypt);
             SaveNewFile(imageToEncrypt, newImageFile);
         } catch(Exception e){
+            e.printStackTrace();
 
         }
 
@@ -35,7 +35,7 @@ public class EncryptLSB {
     private static BufferedImage GetImageToEncrypt(BufferedImage image){
         ColorModel colorModel = image.getColorModel(); //colorModel represents how colors are represented within AWT
         boolean isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
-        WritableRaster raster = image.copyDate(null); //provided Pixel writing capabilities
+        WritableRaster raster = image.copyData(null); //provided Pixel writing capabilities
         return new BufferedImage(colorModel, raster, isAlphaPremultiplied, null); //now we are making new image out of these
         //raster writes the new data into the BufferedImage and colorModel tells us how to interpret that new data
     }
@@ -57,8 +57,8 @@ public class EncryptLSB {
     }
 
     private static String[] ConvertMessageToBinary(String message){
-        int messageAscii = ConvertMessageToAscii(message);
-        String messageBinary = ConvertAsciiToBinary(messageAscii);
+        int[] messageAscii = ConvertMessageToAscii(message);
+        String[] messageBinary = ConvertAsciiToBinary(messageAscii);
         return messageBinary;
     }
 
@@ -73,17 +73,18 @@ public class EncryptLSB {
 
     private static String[] ConvertAsciiToBinary(int[] asciiValues){
         String[] messageBinary = new String[asciiValues.length];
-        for(int i = 0; i < asciiValues.length(); i++){
+        for(int i = 0; i < asciiValues.length; i++){
             String binary = LeftPadZeros(Integer.toBinaryString(asciiValues[i]));
             messageBinary[i] = binary;
         }  
+        return messageBinary;
     }
 
-    private static String LeftPadZeros(String Binary){
+    private static String LeftPadZeros(String binary){
         StringBuilder sb = new StringBuilder("00000000");
         int offSet = 8 - binary.length();
-        for(int i = 0; i < Binary.length(); i++){
-            sb.setCharAt(i + offSet, Binary.charAt(i));
+        for(int i = 0; i < binary.length(); i++){
+            sb.setCharAt(i + offSet, binary.charAt(i));
         }
         return sb.toString();
     }
@@ -91,12 +92,13 @@ public class EncryptLSB {
     private static void EncodeMessageBinaryInPixels(Pixel[] pixels, String[] messageBinary) {
         int pixelIndex = 0;
         boolean isLastCharacter = false;
-        for(int i = 0; i < messageBinary.length(); i++){
+        for(int i = 0; i < messageBinary.length; i++){
             Pixel[] currentPixels = new Pixel[] {pixels[pixelIndex], pixels[pixelIndex + 1], pixels[pixelIndex + 2]};
             if(i + 1 == messageBinary.length){
                 isLastCharacter = true;
             }
             ChangePixelsColor(messageBinary[i], currentPixels, isLastCharacter);  //change the current pixels colors in order to hide the message in binary 
+            pixelIndex = pixelIndex + 3;
         }
     }
 
@@ -122,9 +124,9 @@ public class EncryptLSB {
 
     private static String[] GetPixelsRGBBinary(Pixel pixel, char[] messageBinaryChars){  //turn the pixels into integer values and into binary string and change the LSB of binary into messageBinaryCHars
             String[] pixelRGBBinary = new String[3];
-            pixelRGBBinary[0] = ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getRed()), messageBinaryChar[0]);
-            pixelRGBBinary[1] = ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getGreen()), messageBinaryChar[1]);
-            pixelRGBBinary[2] = ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getBlue()), messageBinaryChar[2]);
+            pixelRGBBinary[0] = ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getRed()), messageBinaryChars[0]);
+            pixelRGBBinary[1] = ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getGreen()), messageBinaryChars[1]);
+            pixelRGBBinary[2] = ChangePixelBinary(Integer.toBinaryString(pixel.getColor().getBlue()), messageBinaryChars[2]);
             return pixelRGBBinary;
 
     }

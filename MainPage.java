@@ -1,16 +1,8 @@
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 import java.io.File;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 public class MainPage {
     private JFrame frame;
@@ -72,7 +64,7 @@ public class MainPage {
         messagePanel.add(messageField);
         messageField.setColumns(10);
 
-        ActionListener encryptListener = new ActionListener() 
+        ActionListener encryptListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
                 File ImageFile = FileChooser.MakeFileChooser();
@@ -82,16 +74,16 @@ public class MainPage {
             }
         };
         encryptButton.addActionListener(encryptListener);
-
+        
         ActionListener decryptListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-
+                DecryptLSB.Decrypt();
+        
             }
-
+        
         };
         decryptButton.addActionListener(decryptListener);
-
-    }    
-}
-
+        
+        }    
+        }
