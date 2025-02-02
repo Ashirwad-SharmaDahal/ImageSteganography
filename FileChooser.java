@@ -1,15 +1,25 @@
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 
 public class FileChooser {
-    public static File MakeFileChooser(){
-        JFileChooser chooser = new JFileChooser(); //this instantiates chooser opject
+    public static File selectImageFile(JFrame parent) {
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Select Image File");
+    int option = fileChooser.showOpenDialog(parent);
+    if (option == JFileChooser.APPROVE_OPTION) {
+        return fileChooser.getSelectedFile();
+    }
+    return null;
+}
 
-        int option = chooser.showOpenDialog(null); //this displays chooser object to the user
-        if(option == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();  //if the user selects the approve option on a file then we are gonna get that file and return it
-            return file;
+    public static File saveImageFile(JFrame parent) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save Encrypted Image");
+        int option = fileChooser.showSaveDialog(parent);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
         }
-        return null;  //else we return null and nothing happens
+        return null;
     }
 }

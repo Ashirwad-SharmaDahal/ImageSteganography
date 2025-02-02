@@ -11,7 +11,7 @@ public class EncryptLSB {
     /*
      * Driver method
      */
-    public static void Encrypt(File imageFile, String message) {
+    public static void encrypt(File imageFile, String message, File outputFile) {
         String directory = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();  //gets the directory of documents folder
         String newImageFileString = directory = "\\export.png";
         File newImageFile = new File(newImageFileString);
@@ -24,7 +24,7 @@ public class EncryptLSB {
             String[] messageBinary = ConvertMessageToBinary(message);
             EncodeMessageBinaryInPixels(pixels, messageBinary);
             ReplacePixelsInNewBufferedImage(pixels, imageToEncrypt);
-            SaveNewFile(imageToEncrypt, newImageFile);
+            SaveNewFile(imageToEncrypt, outputFile);
         } catch(Exception e){
             e.printStackTrace();
 
@@ -148,9 +148,9 @@ public class EncryptLSB {
           }
     }
 
-    private static void SaveNewFile(BufferedImage newImage, File newImageFile) {
+    private static void SaveNewFile(BufferedImage newImage, File outputFile) {
         try{
-            ImageIO.write(newImage, "png", newImageFile);
+            ImageIO.write(newImage, "png", outputFile);
         } catch(IOException e){
             e.printStackTrace();
         }    

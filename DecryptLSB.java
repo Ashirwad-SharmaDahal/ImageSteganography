@@ -10,19 +10,12 @@ import javax.swing.JFileChooser;
 public class DecryptLSB { 
 
 
-    public static void Decrypt() {
-         String directory = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();  //gets the directory of documents folder
-        String newImageFileString = directory = "\\export.png";
-        File newImageFile = new File(newImageFileString);
-        try {
-            BufferedImage image = ImageIO.read(newImageFile);
+    public static String decrypt(File imageFile) throws IOException{
+            BufferedImage image = ImageIO.read(imageFile);
             Pixel[] pixels = GetPixelArray(image);
-            System.out.println(DecodeMessageFromPixels(pixels));
-        } catch (IOException e) {
-            e.printStackTrace();
-            
-        }
-    }
+            return DecodeMessageFromPixels(pixels);
+        } 
+    
 
     private static Pixel[] GetPixelArray(BufferedImage imageToEncrypt){
         int height = imageToEncrypt.getHeight();
